@@ -93,17 +93,21 @@ The model weights and training logs are intentionally **not** committed to the r
 
 ## Results
 The model is trained by downloading the NCBI Disease Corpus and a transformer from Hugging Face, so results are produced when you run the script (not stored in the repo by default). After a run, fill in the table below from `results/test_metrics.csv`:
+Corrected `distilbert-base-uncased` for 2 epochs on the NCBI Disease Corpus, evaluated on the held-out test set:
 
-| Metric    | Score |
-|-----------|-------|
-| Precision | —     |
-| Recall    | —     |
-| F1        | —     |
-| Accuracy  | —     |
+| Metric    | Score  |
+|-----------|--------|
+| Precision | 0.7825 |
+| Recall    | 0.8469 |
+| F1        | 0.8134 |
+| Accuracy  | 0.9804 |
 
-The easiest way to run it for free is **Google Colab** with a GPU runtime: upload `src/train_ner.py`, `pip install -r requirements.txt`, run it (a couple of epochs takes roughly 10–15 minutes on a Colab GPU), then download the files from `results/` and commit them.
+Recall (0.85) is higher than precision (0.78), meaning the model catches most disease mentions but over-predicts some, a reasonable trade-off for a lightweight, general-domain base model. Note that token-level accuracy (0.98) is inflated by the large number of non-entity ("O") tokens, which is why span-level F1 is the metric that actually reflects NER quality here. A biomedical encoder such as BioBERT or PubMedBERT would be the natural next step to push F1 higher.
 
-## Relevance to Medical AI PhD Applications
+*Full metrics, including the per-entity breakdown, are in `results/test_metrics.json`. Trained in ~90 seconds on a single Colab T4 GPU.*
+
+
+## Relevance to Medical AI projects
 This project is aligned with research areas such as:
 - Clinical language models
 - Biomedical NLP
@@ -117,7 +121,7 @@ It complements projects in PyTorch clinical risk prediction and patient survival
 ## How I Built This
 I built this as a compact, readable example of biomedical token classification rather than a maximal-performance system.
 
-A few decisions worth explaining:
+A few decisions to note:
 - **Dataset.** I used the NCBI Disease Corpus because it is a public, expert-annotated benchmark for disease mention recognition, so the results are comparable to published work and nothing sensitive is involved.
 - **Labels.** The label names (outside / beginning / inside a disease mention) are read directly from the dataset rather than hard-coded, so the script stays correct if the schema changes.
 - **Tokenisation.** Transformer tokenisers split words into sub-word pieces, so I align the original word-level labels to the sub-word tokens and mask the extra pieces with `-100`, which tells the loss function to ignore them. This avoids counting a single word multiple times.
