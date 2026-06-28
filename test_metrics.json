@@ -1,0 +1,25 @@
+{
+  "overall": {
+    "loss": 0.05964119732379913,
+    "precision": 0.782483156881617,
+    "recall": 0.846875,
+    "f1": 0.8134067033516759,
+    "accuracy": 0.9804057639710985,
+    "runtime": 2.3948,
+    "samples_per_second": 392.94,
+    "steps_per_second": 49.274,
+    "epoch": 2.0
+  },
+  "per_entity": {
+    "Disease": {
+      "precision": 0.782483156881617,
+      "recall": 0.846875,
+      "f1": 0.8134067033516759,
+      "number": 960.0
+    },
+    "overall_precision": 0.782483156881617,
+    "overall_recall": 0.846875,
+    "overall_f1": 0.8134067033516759,
+    "overall_accuracy": 0.9804057639710985
+  }
+}
